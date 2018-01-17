@@ -1,37 +1,44 @@
-= Interval Library for Arduino =
+= sACN Source Library for Arduino =
 
-This library allows you to set repeating or one-time functions that happen after an interval like in JavaScript. You can use .setInterval() to create a repeating event, and .setTimeout() to create a one-time event. You can also change the interval delay using .setDelay(). Once you've created an interval, you have to continually check it in the main loop using .check(). When the interval has passed, .check will be true.
+This library creates an array for sending DMX-512 messages using streaming ACN (sACN). This affords control of many modern stage lighting fixtures over UDP. The library wraps a UDP transport object in the constructor so it can send UDP packets.
 
+The Library uses the Arduino WiFiUDP library, but it can work with either MKR1000 and other Arduino boards using the WiFi101 library, or ESP8266 boards using the ESP8266WiFi library.
+
+For more detail on the sACN protocol, see the http://tsp.esta.org/tsp/documents/docs/E1-31-2016.pdf[ESTA E.131 protocol document]
 
 = Commands =
 
-
-== Interval
+== sACNSource
 
 .Syntax
 ----
-Interval myInterval;
+WiFiUDP Udp;                       // instance of UDP library
+sACNSource myController(Udp);      // Your Ethernet-to-DMX device
 ----
 
 .Parameters
-none
+takes a UDP object for transport
 
 .Returns
 void
 
 .Notes
-Creates a new interval.
+Initializes the sACN packet.
 
-== setInterval
+
+== begin
 
 .Syntax
 ----
-myInterval.setInterval(function, delay);
+myController.begin(myDevice, myUuid, myUniverse);
 ----
 
 .Parameters
-function - a function to call when the delay passes
-delay (_unsigned long_) - the delay before the function is called.
+myDevice - a character string containing the name of the source device
+
+myUuid - a  character string containing the UUID of the source device. This must be in ASCII-encoded hexadecimal, but can include dashes as delimiters. See https://www.uuidgenerator.net/[UUID Generator] for examples.
+
+myUniverse - an integer containing the DMX universe you want to control.
 
 .Returns
 void
@@ -39,143 +46,172 @@ void
 .Notes
 Sets the function to be called when the interval delay passes. When the delay passes, the interval is reset, and starts again.
 
-== setTimeout
+
+
+== setUuid
 
 .Syntax
 ----
-myInterval.setTimeout(function, delay);
+myController.setUuid(myUuid);
 ----
 
 .Parameters
-function - a function to call when the delay passes
-delay (_unsigned long_) - the delay before the function is called.
+myUuid - a  character string containing the UUID of the source device.
 
 .Returns
 void
 
 .Notes
-Sets the function to be called when the interval delay passes. When the delay passes, the interval is stopped.
+This must be in ASCII-encoded hexadecimal, but can include dashes as delimiters. See https://www.uuidgenerator.net/[UUID Generator] for examples.
 
-
-== setDelay
+== setSourceName
 
 .Syntax
 ----
-myInterval.setDelay(delay);
+myController.setSourceName(myDevice);
 ----
 
 .Parameters
-delay (_unsigned long_) - the delay before the function is called.
+myDevice - a character array containing the device name of your source. Max. 64 characters.
 
 .Returns
 void
 
 .Notes
-Changes the delay of the interval. Takes effect immediately, so calling setDelay() in the middle of an interval's delay will extend the delay.
 
-== check
-
-.Syntax
-----
-myInterval.check();
-// or
-unsigned long remaining = myInterval.check();
-----
-
-.Parameters
-none
-
-.Returns
-remaining (_unsigned long_) - the remaining time before the current delay is over. Reading this return value is optional.
-
-.Notes
-Must be called every time through the main loop to update the interval.
-
-== reset
+== setUniverse
 
 .Syntax
 ----
-myInterval.reset();
+myController.setUniverse(dmxUniverse);
 ----
 
 .Parameters
-none
+dmxUniverse - an integer containing the DMX universe that you wish to control.
 
 .Returns
 void
 
 .Notes
-resets the interval to the current millis. Takes effect immediately, so calling setDelay() in the middle of an interval's delay will restart the delay.
 
-
-== stop
-
+== setChannel
 .Syntax
 ----
-myInterval.stop();
+myController.setChannel(dmxChannel, level);
 ----
 
 .Parameters
-none
+dmxChannel - an integer containing the DMX channel you want to set (1-512)
+
+level - a byte containing the level to which you want to set the channel ( 0 - 255)
 
 .Returns
 void
 
 .Notes
-Stops the interval. This function stops both recurring intervals (setInterval) and non-recurring intervals (setTimeout).
+Note that DMX channels are usually 1-indexed, rather than 0-indexed. So the first channel is channel 1.
 
-= Properties =
+== sendPacket
+.Syntax
+----
+myController.sendPacket(receiverAddress, port);
+----
 
-== repeating
+.Parameters
+receiverAddress - a character array containing the numeric IP address of the receiver
+
+port - an integer containing the port number on which the receiver is listening. Typically 5568 for sACN.
+
+.Returns
+void
+
+.Notes
+This function auto-increments the sequence number for packets, so you don't have to.
+
+== setSequenceNumber
+.Syntax
+----
+myController.setSequenceNumber(seqNumber);
+----
+
+.Parameters
+seqNumber - a byte containing the packet sequence number.
+
+.Returns
+void
+
+.Notes
+sACN packets are given a packet sequence number so that the receiver can keep the sequence of packets from a given sender. The _sendPacket_ function automatically increments the sequence number, so there's no real need to set this unless you want to set a specific number.
+
+== getSequenceNumber
 
 .Syntax
 ----
- if (myInterval.repeating == true) {
-   // this is a recurring interval
- };
+byte num = myController.getSequenceNumber();
 ----
 
 .Parameters
 none
 
 .Returns
-repeating (_boolean_) - whether or not the interval will repeat
+a byte containing the latest packet sequence number.
 
 .Notes
-A boolean variable. Determines whether an interval should restart when the delay ends, or whether it should stop.
 
-== done
-
+== setSyncAddress
 .Syntax
 ----
- if (myInterval.done == true) {
-   // this interval will no longer run
- };
+myController.setSyncAddress(syncAddress);
+----
+
+.Parameters
+syncAddress - an int containing the sync universe address. Default is 0.
+
+.Returns
+void
+
+.Notes
+
+== setOptions
+.Syntax
+----
+myController.setOptions(options);
+----
+
+.Parameters
+a byte containing the options flags for preview data, stream termination, and forced synchronization.
+
+.Returns
+void
+
+.Notes
+Not implemented in version 0.0.1
+
+== readData
+.Syntax
+----
+myController.readData(byteNumber);
+----
+
+.Parameters
+byteNumber - a byte containing the number of the byte in the packet that you want to read.
+
+.Returns
+a byte variable containing the value of the byte you requested
+
+.Notes
+
+== packetSize
+.Syntax
+----
+myController.packetSize();
 ----
 
 .Parameters
 none
 
 .Returns
-done (_boolean_) - whether or not the interval is done
+an int variable containing the size of the packet.
 
 .Notes
-A boolean variable. Determines whether an interval is done or not.
-
-== License ==
-
-Copyright (c) Tom Igoe. All right reserved.
-
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+Unless modified, this will always be 638.

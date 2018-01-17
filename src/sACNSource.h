@@ -29,7 +29,7 @@ class sACNSource
     byte getSequenceNumber();                       // get packet sequence number
     void setSyncAddress(int syncAddress);           // set sync address
     void setOptions(byte options);                  // set options flags
-    byte readData(int b);                                // read packet data
+    byte readData(int b);                           // read packet data
     int packetSize();                              // packet size
     void sendPacket(const char* addr, int port);        // send the packet via UDP
 
