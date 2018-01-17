@@ -1,0 +1,31 @@
+#######################################
+# Syntax Coloring Map For sACNSource
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+sACNSource	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+setUuid	KEYWORD2
+setSourceName	KEYWORD2
+setUniverse	KEYWORD2
+setChannel	KEYWORD2
+sendPacket  KEYWORD2
+setSequenceNumber  KEYWORD2
+getSequenceNumber  KEYWORD2
+setSyncAddress  KEYWORD2
+setOptions  KEYWORD2
+readData  KEYWORD2
+packetSize  KEYWORD2
+sendPacket  KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################

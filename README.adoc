@@ -1,0 +1,181 @@
+= Interval Library for Arduino =
+
+This library allows you to set repeating or one-time functions that happen after an interval like in JavaScript. You can use .setInterval() to create a repeating event, and .setTimeout() to create a one-time event. You can also change the interval delay using .setDelay(). Once you've created an interval, you have to continually check it in the main loop using .check(). When the interval has passed, .check will be true.
+
+
+= Commands =
+
+
+== Interval
+
+.Syntax
+----
+Interval myInterval;
+----
+
+.Parameters
+none
+
+.Returns
+void
+
+.Notes
+Creates a new interval.
+
+== setInterval
+
+.Syntax
+----
+myInterval.setInterval(function, delay);
+----
+
+.Parameters
+function - a function to call when the delay passes
+delay (_unsigned long_) - the delay before the function is called.
+
+.Returns
+void
+
+.Notes
+Sets the function to be called when the interval delay passes. When the delay passes, the interval is reset, and starts again.
+
+== setTimeout
+
+.Syntax
+----
+myInterval.setTimeout(function, delay);
+----
+
+.Parameters
+function - a function to call when the delay passes
+delay (_unsigned long_) - the delay before the function is called.
+
+.Returns
+void
+
+.Notes
+Sets the function to be called when the interval delay passes. When the delay passes, the interval is stopped.
+
+
+== setDelay
+
+.Syntax
+----
+myInterval.setDelay(delay);
+----
+
+.Parameters
+delay (_unsigned long_) - the delay before the function is called.
+
+.Returns
+void
+
+.Notes
+Changes the delay of the interval. Takes effect immediately, so calling setDelay() in the middle of an interval's delay will extend the delay.
+
+== check
+
+.Syntax
+----
+myInterval.check();
+// or
+unsigned long remaining = myInterval.check();
+----
+
+.Parameters
+none
+
+.Returns
+remaining (_unsigned long_) - the remaining time before the current delay is over. Reading this return value is optional.
+
+.Notes
+Must be called every time through the main loop to update the interval.
+
+== reset
+
+.Syntax
+----
+myInterval.reset();
+----
+
+.Parameters
+none
+
+.Returns
+void
+
+.Notes
+resets the interval to the current millis. Takes effect immediately, so calling setDelay() in the middle of an interval's delay will restart the delay.
+
+
+== stop
+
+.Syntax
+----
+myInterval.stop();
+----
+
+.Parameters
+none
+
+.Returns
+void
+
+.Notes
+Stops the interval. This function stops both recurring intervals (setInterval) and non-recurring intervals (setTimeout).
+
+= Properties =
+
+== repeating
+
+.Syntax
+----
+ if (myInterval.repeating == true) {
+   // this is a recurring interval
+ };
+----
+
+.Parameters
+none
+
+.Returns
+repeating (_boolean_) - whether or not the interval will repeat
+
+.Notes
+A boolean variable. Determines whether an interval should restart when the delay ends, or whether it should stop.
+
+== done
+
+.Syntax
+----
+ if (myInterval.done == true) {
+   // this interval will no longer run
+ };
+----
+
+.Parameters
+none
+
+.Returns
+done (_boolean_) - whether or not the interval is done
+
+.Notes
+A boolean variable. Determines whether an interval is done or not.
+
+== License ==
+
+Copyright (c) Tom Igoe. All right reserved.
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
