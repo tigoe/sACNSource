@@ -1,2 +1,2 @@
 char ssid[]     = "network";
-char password[] = "password";
+char password[] = "password"; 
