@@ -31,6 +31,7 @@ Initializes the sACN packet.
 .Syntax
 ----
 myController.begin(myDevice, myUuid, myUniverse);
+myController.begin(myDevice, myUuid, myUniverse, thisPort);
 ----
 
 .Parameters
@@ -39,6 +40,8 @@ myDevice - a character string containing the name of the source device
 myUuid - a  character string containing the UUID of the source device. This must be in ASCII-encoded hexadecimal, but can include dashes as delimiters. See https://www.uuidgenerator.net/[UUID Generator] for examples.
 
 myUniverse - an integer containing the DMX universe you want to control.
+
+thisPort - if you want to use a port other than the sACN standard (5568), you can pass in an int with your port number
 
 .Returns
 void
@@ -114,13 +117,14 @@ Note that DMX channels are usually 1-indexed, rather than 0-indexed. So the firs
 == sendPacket
 .Syntax
 ----
-myController.sendPacket(receiverAddress, port);
+myController.sendPacket(receiverAddress);
+myController.sendPacket(receiverAddress, thisPort);
 ----
 
 .Parameters
 receiverAddress - a character array containing the numeric IP address of the receiver
 
-port - an integer containing the port number on which the receiver is listening. Typically 5568 for sACN.
+thisPort - if you want to use a port other than the sACN standard (5568), you can pass in an int with your port number
 
 .Returns
 void

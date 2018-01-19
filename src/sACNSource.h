@@ -16,11 +16,12 @@
 #define SACN_UUID "0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a"
 #define SACN_UNIVERSE 1
 #define SACN_PACKETLENGTH 638
+#define SACN_UDP_PORT 5568
 class sACNSource
 {
   public:
-    sACNSource(UDP& udp);
-    void begin(const char* myDevice, const char* myUuid, int myUniverse); // initialize data packet
+    sACNSource(UDP& udp);                          // constructor with UDP
+    void begin(const char* myDevice, const char* myUuid, int myUniverse, int thisPort=SACN_UDP_PORT); // initialize data packet
     void setUuid(const char* myUuid);               // set source ID
     void setSourceName(const char* myDevice);       // set source name
     void setUniverse(int myUniverse);               // set universe number
@@ -31,7 +32,7 @@ class sACNSource
     void setOptions(byte options);                  // set options flags
     byte readData(int b);                           // read packet data
     int packetSize();                              // packet size
-    void sendPacket(const char* addr, int port);        // send the packet via UDP
+    void sendPacket(const char* addr, int port=SACN_UDP_PORT);        // send the packet via UDP
 
   private:
     UDP*  _udp;                                   // reference to transport

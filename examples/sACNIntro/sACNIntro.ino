@@ -28,12 +28,11 @@
 #include <WiFi101.h>
 //#include <ESP8266WiFi.h>    // This should work with the ESP8266 as well.
 #include <WiFiUdp.h>
- #include <sACNSource.h>
+#include <sACNSource.h>
 #include "config.h"
 
 WiFiUDP Udp;                                  // instance of UDP library
 sACNSource myController(Udp);                 // Your Ethernet-to-DMX device
-const int port = 5568;                        // port on which this client sends
 char receiverAddress[] = "192.168.0.12";      // sACN receiver address
 
 int myUniverse = 1;                                 // DMX universe
@@ -57,7 +56,6 @@ void setup() {
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
   Serial.println(ip);
-  Udp.begin(port);                // initialize UDP
   
   // set DMX channel values to 0:
   for (int dmxChannel = 1; dmxChannel < 513; dmxChannel++) {
@@ -72,7 +70,7 @@ void loop() {
   myController.setChannel(1, level);              // set channel 1 (brightness)
   level = level + 10;                             // increment level
   Serial.println(level);                          // print level
-  myController.sendPacket(receiverAddress, port); // send the data
+  myController.sendPacket(receiverAddress); // send the data
   delay(1000);                                    // wait 1 second
 }
 

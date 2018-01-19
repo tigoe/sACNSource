@@ -2,18 +2,20 @@
 #include "sACNSource.h"
 
 sACNSource::sACNSource(UDP& udp) {
-  this->_udp = &udp;
+  this->_udp = &udp;                           // initialize UDP
   _myUniverse = SACN_UNIVERSE;                 // DMX universe
-  _byteArray[SACN_PACKETLENGTH];                     // establish byte array
+  _byteArray[SACN_PACKETLENGTH];               // establish byte array
   _myDevice = SACN_DEVICENAME;                 // sender name
   _myUuid = SACN_UUID;                         // sender UUID
   _sequenceNumber = 0;                         // packet sequence number
 }
 
-void sACNSource::begin(const char* myDevice, const char* myUuid, int myUniverse) {
+void sACNSource::begin(const char* myDevice, const char* myUuid, int myUniverse, int thisPort) {
   setUniverse(myUniverse);
   setSourceName(myDevice);
   setUuid(myUuid);
+  // call udp.begin():
+  this->_udp->begin(thisPort);
   _sequenceNumber = 0;                      // packet sequence number
 
    // fill in the pre-defined values in the packet:
@@ -166,10 +168,12 @@ int sACNSource::packetSize() {
 
 void sACNSource::sendPacket(const char* addr, int thisPort) {
   // start a new packet:
+  if (this->_udp != 0) {       // make sure there's a UDP transport
    this->_udp->beginPacket(addr, thisPort);                // start sACN packet
    this->_udp->write(_byteArray, sizeof(_byteArray));  // add payload to it
    this->_udp->endPacket();                            // finish and send packet
   // you can send continuously without incrementing the
   // sequence number, but it's good practice:
    this->setSequenceNumber(this->_sequenceNumber++);
+ }
 }
