@@ -47,8 +47,7 @@ thisPort - if you want to use a port other than the sACN standard (5568), you ca
 void
 
 .Notes
-Sets the function to be called when the interval delay passes. When the delay passes, the interval is reset, and starts again.
-
+Sets the initial parameters for the sACN packet.
 
 
 == setUuid
