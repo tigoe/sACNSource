@@ -72,7 +72,7 @@ void loop() {
     myController.setChannel(3, level);              // set channel 1 (brightness)
     Serial.println(level);                          // print level
     myController.sendPacket(receiverAddress);       // send the data
-    delay(100);                                    // wait 1 second
+    delay(100);                                    // wait .1 second
   }
   delay(1000);
     // fade down:
@@ -80,7 +80,7 @@ void loop() {
     myController.setChannel(3, level);              // set channel 1 (brightness)
     Serial.println(level);                          // print level
     myController.sendPacket(receiverAddress);      // send the data
-    delay(100);                                    // wait 1 second
+    delay(100);                                    // wait .1 second
   }
   delay(1000);
 }
