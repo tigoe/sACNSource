@@ -25,18 +25,14 @@ char receiverAddress[] = "192.168.0.12";      // sACN receiver address
 int myUniverse = 1;                                 // DMX universe
 char myDevice[] = "myDeviceName";                   // sender name
 char myUuid[] = "130edd1b-2d17-4289-97d8-2bff1f4490fb"; // sender UUID
-
-int previousLevel[6];
-int threshold = 2;
-bool packetChanged = false;     // send a packet only when this is true
-
+byte channels[] = {101, 103, 110, 113, 114, 117};    // 6 random DMX channels to control
 void setup() {
   Serial.begin(9600);
   //  while you're not connected to a WiFi AP,
   while ( WiFi.status() != WL_CONNECTED) {
     Serial.print("Attempting to connect to Network named: ");
-    Serial.println(ssid);           // print the network name (SSID)
-    WiFi.begin(ssid, password);     // try to connect
+    Serial.println(SECRET_SSID);           // print the network name (SSID)
+    WiFi.begin(SECRET_SSID, SECRET_PASS);     // try to connect
     delay(2000);
   }
   // initialize sACN source:
@@ -55,31 +51,26 @@ void setup() {
 
 void loop() {
   // an array for current fader levels:
-  int currentLevel[6];
+  int level[6];
 
   // iterate over the faders:
   for (int fader = 0; fader < 6; fader++) {
-    // read the current level of each fader:
-    currentLevel[fader] = analogRead(fader);
-    // if the current is different from the previous by more than the threshold:
-    if (abs(currentLevel[fader] - previousLevel[fader]) > threshold) {
-      // send the new reading:
-      myController.setChannel(fader, currentLevel[fader]);
-      // print the current level:
-      Serial.println(fader);
-      Serial.print(": ");
-      Serial.println(currentLevel[fader]);
-      // something changed in the packet, so you'll need to send:
-      packetChanged = true;
-    }
-    // save current level for next time through:
-    previousLevel[fader] = currentLevel[fader];
+    // read the current level of each fader, conver to a byte:
+    level[fader] = analogRead(fader)/4;
+    // set the channel appropriate to the level:
+    myController.setChannel(channels[fader], level[fader]);
+    // print the current level:
+    Serial.print(fader);
+    Serial.print(": ");
+    Serial.print(level[fader] / 4);
+    Serial.print("\t");
   }
   Serial.println();
-  
-  if (packetChanged) {
+
+  // every 500 milliseconds, send a sACN packet:
+  if (millis() % 500 < 10) {
     myController.sendPacket(receiverAddress); // send the data
-    packetChanged = false;
+
   }
 }
 
