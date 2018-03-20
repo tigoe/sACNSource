@@ -9,18 +9,18 @@
   5 - white
 
   The color of the light will depend on the angle
-  of the encoder relative to its zero position. 0 degrees = red, 
-  120 degrees = green, 240 degrees = blue. 
+  of the encoder relative to its zero position. 0 degrees = red,
+  120 degrees = green, 240 degrees = blue.
   The calculation of angle on the encoder is approximate. It assumes
   88 steps per rotation. Pressing the pushbutton resets the encoder
-  to zero, and resets the colro wheel to 0 degrees (red). 
+  to zero, and resets the colro wheel to 0 degrees (red).
 
   Uses Paul Stoffregen's Encoder library:
   https://www.pjrc.com/teensy/td_libs_Encoder.html
 
   Uses sACNSource library an a MKR1000. Will probably work on an ESP8266,
   but has not been tested.
-  
+
   Based on HSI conversion from Saiko LED, by Brian Neitner:
   http://blog.saikoled.com/post/44677718712/how-to-convert-from-hsi-to-rgb-white
   http://blog.saikoled.com/post/43693602826/why-every-led-light-should-be-using-hsi
@@ -39,7 +39,7 @@
 
 WiFiUDP Udp;                                  // instance of UDP library
 sACNSource myController(Udp);                 // Your Ethernet-to-DMX device
-char receiverAddress[] = "192.168.0.12";      // sACN receiver address
+char receiverAddress[] = "128.122.151.182";      // sACN receiver address
 
 int myUniverse = 1;                                 // DMX universe
 char myDevice[] = "myDeviceName";                   // sender name
@@ -56,7 +56,7 @@ int red, green, blue, white = 0;  // next four channels
 void setup() {
   Serial.begin(9600);       // initialize serial communication
   pinMode(buttonPin, INPUT_PULLUP); // pushbutton on pin 4
-  
+
   //  while you're not connected to a WiFi AP,
   while ( WiFi.status() != WL_CONNECTED) {
     Serial.print("Attempting to connect to Network named: ");
@@ -75,8 +75,8 @@ void setup() {
   // set DMX channel values to 0:
   for (int dmxChannel = 1; dmxChannel < 513; dmxChannel++) {
     myController.setChannel(dmxChannel, 0);
-    myController.sendPacket(receiverAddress);
   }
+  myController.sendPacket(receiverAddress);
 }
 
 void loop() {
@@ -111,12 +111,12 @@ void setColors(int sensorReading) {
   hue = constrain(hue, 0, 360);
   // use the angle to calculate RGB:
   unsigned long color = hsiToRgb(hue, 100, 100);
-  // hsiToRgb returns a long with 3 bytes, R, G, B, W. 
+  // hsiToRgb returns a long with 3 bytes, R, G, B, W.
   // separate them out:
   red = (color >> 16) % 256;      // red is the high byte
   green = (color >> 8) % 256;     // green is the middle byte
   blue = color % 256;             // blue is the low byte
-  
+
   // print the hue and the colors (for diagnostic purposes only):
   Serial.println(hue);
   String colors = String(red);

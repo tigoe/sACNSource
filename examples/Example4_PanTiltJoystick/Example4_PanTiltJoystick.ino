@@ -29,7 +29,7 @@
 
 WiFiUDP Udp;                                  // instance of UDP library
 sACNSource myController(Udp);                 // Your Ethernet-to-DMX device
-char receiverAddress[] = "192.168.0.12";      // sACN receiver address
+char receiverAddress[] = "128.122.151.182";      // sACN receiver address
 
 int myUniverse = 1;                                 // DMX universe
 char myDevice[] = "myDeviceName";                   // sender name
@@ -81,16 +81,17 @@ void loop() {
 
   if (x != 0) {
     pan += x;
-    myController.setChannel(1, pan);
+    myController.setChannel(101, pan);
   }
   if (y != 0) {
     tilt += y;
-    myController.setChannel(2, tilt);
+    myController.setChannel(103, tilt);
   }
 
   if (button != 0) {
     bright += button;
-    myController.setChannel(12, bright);
+    myController.setChannel(114, bright);
+    myController.setChannel(113, 255);
   }
 
   // if you changed any of those things, you need to send a packet:

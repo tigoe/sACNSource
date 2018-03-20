@@ -20,12 +20,12 @@
 
 WiFiUDP Udp;                                  // instance of UDP library
 sACNSource myController(Udp);                 // Your Ethernet-to-DMX device
-char receiverAddress[] = "192.168.0.12";      // sACN receiver address
+char receiverAddress[] = "128.122.151.182";      // sACN receiver address
 
 int myUniverse = 1;                                 // DMX universe
 char myDevice[] = "myDeviceName";                   // sender name
 char myUuid[] = "130edd1b-2d17-4289-97d8-2bff1f4490fb"; // sender UUID
-byte channels[] = {101, 103, 110, 113, 114, 117};    // 6 random DMX channels to control
+byte channels[] = {201, 203, 210, 213, 214, 217};    // 6 random DMX channels to control
 void setup() {
   Serial.begin(9600);
   //  while you're not connected to a WiFi AP,
