@@ -25,25 +25,36 @@
   http://blog.saikoled.com/post/44677718712/how-to-convert-from-hsi-to-rgb-white
   http://blog.saikoled.com/post/43693602826/why-every-led-light-should-be-using-hsi
 
+ You'll also need to add a tab to your sketch called arduino_secrets.h
+  for the SSID and password of the network to which you plan to connect,
+  as follows:
+  #define SECRET_SSID "ssid"  // fill in your value
+  #define SECRET_PASS "password" // fill in your value
+  #define SECRET_SACN_RECV "192.168.0.14"  // your sACM receiver's IP address
+  // Unique ID of your SACN source. You can generate one from https://uuidgenerator.net
+  // or on the command line by typing uuidgen
+  #define SECRET_SACN_UUID "CBC0C271-8022-4032-BC6A-69F614C62816"
+
   created 19 Feb. 2018
+  updated 2 Apr 2020
   by Tom Igoe
 */
 
 #include <Encoder.h>            // encoder library
 #include "HSI.h"                // HSI to RGB calculations
 #include <SPI.h>                // WiFi101 dependencies
-#include <WiFi101.h>
+//#include <WiFi101.h>      // use this for MKR1000
+#include <WiFiNINA.h>       // use this for MKR1010, Nano33 IoT
+//#include <ESP8266WiFi.h>    // This should work with the ESP8266 as well.
 #include <WiFiUdp.h>
 #include <sACNSource.h>         // sACN library
 #include "arduino_secrets.h"    // your SSID username and password go here
 
-WiFiUDP Udp;                                  // instance of UDP library
-sACNSource myController(Udp);                 // Your Ethernet-to-DMX device
-char receiverAddress[] = "128.122.151.182";      // sACN receiver address
+WiFiUDP Udp;                       // instance of UDP library
+sACNSource myController(Udp);      // Your Ethernet-to-DMX device
 
-int myUniverse = 1;                                 // DMX universe
-char myDevice[] = "myDeviceName";                   // sender name
-char myUuid[] = "130eda1b-2e24-4349-97ae-2bfa1f4390fb"; // sender UUID
+int myUniverse = 1;                // DMX universe
+char myDevice[] = "myDeviceName";  // sender name
 
 const int buttonPin = 4;    // pushbutton pin of the encoder
 Encoder thisEncoder(6, 7);  // initialize the encoder on pins 6 and 7
@@ -65,7 +76,7 @@ void setup() {
     delay(2000);
   }
   // initialize sACN source:
-  myController.begin(myDevice, myUuid, myUniverse);
+  myController.begin(myDevice, SECRET_SACN_UUID, myUniverse);
 
   // When you're connected, print out the device's network status:
   IPAddress ip = WiFi.localIP();
@@ -76,7 +87,7 @@ void setup() {
   for (int dmxChannel = 1; dmxChannel < 513; dmxChannel++) {
     myController.setChannel(dmxChannel, 0);
   }
-  myController.sendPacket(receiverAddress);
+  myController.sendPacket(SECRET_SACN_RECV);
 }
 
 void loop() {
@@ -133,6 +144,6 @@ void setChannels() {
   myController.setChannel(3, green);
   myController.setChannel(4, blue);
   myController.setChannel(5, white);
-  myController.sendPacket(receiverAddress);       // send the data
+  myController.sendPacket(SECRET_SACN_RECV);       // send the data
 }
 

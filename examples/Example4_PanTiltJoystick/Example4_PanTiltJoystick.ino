@@ -11,29 +11,33 @@
   circuit: Adafruit joystick attached to A0 and A1, with button on D5
   (https://www.adafruit.com/products/512)
 
-
-   You'll also need to add a tab to your sketch called config.h
+  You'll also need to add a tab to your sketch called arduino_secrets.h
    for the SSID and password of the network to which you plan to connect,
    as follows:
-   char ssid[]     = "network";  // fill in your value
-   char password[] = "password"; // fill in your value
+   #define SECRET_SSID "ssid"  // fill in your value
+  #define SECRET_PASS "password" // fill in your value
+  #define SECRET_SACN_RECV "192.168.0.14"  // your sACM receiver's IP address
+  // Unique ID of your SACN source. You can generate one from https://uuidgenerator.net
+  // or on the command line by typing uuidgen
+  #define SECRET_SACN_UUID "CBC0C271-8022-4032-BC6A-69F614C62816"
 
   created 19 Feb 2018
+  updated 2 Apr 2020
   by Tom Igoe
 */
 #include <SPI.h>
-#include <WiFi101.h>
+//#include <WiFi101.h>      // use this for MKR1000
+#include <WiFiNINA.h>       // use this for MKR1010, Nano33 IoT
+//#include <ESP8266WiFi.h>    // This should work with the ESP8266 as well.
 #include <WiFiUdp.h>
 #include <sACNSource.h>
 #include "arduino_secrets.h"
 
 WiFiUDP Udp;                                  // instance of UDP library
 sACNSource myController(Udp);                 // Your Ethernet-to-DMX device
-char receiverAddress[] = "128.122.151.182";      // sACN receiver address
 
 int myUniverse = 1;                                 // DMX universe
 char myDevice[] = "myDeviceName";                   // sender name
-char myUuid[] = "130edd1b-2d17-4289-97d8-2bff1f4490fb"; // sender UUID
 
 const int buttonPin = 5;
 byte pan, tilt, bright = 0;
@@ -50,7 +54,7 @@ void setup() {
   pinMode(buttonPin, INPUT_PULLUP);
 
   // initialize sACN source:
-  myController.begin(myDevice, myUuid, myUniverse);
+  myController.begin(myDevice, SECRET_SACN_UUID, myUniverse);
 
   // When you're connected, print out the device's network status:
   IPAddress ip = WiFi.localIP();
@@ -61,7 +65,7 @@ void setup() {
   for (int dmxChannel = 1; dmxChannel < 513; dmxChannel++) {
     myController.setChannel(dmxChannel, 0);
   }
-  myController.sendPacket(receiverAddress);
+  myController.sendPacket(SECRET_SACN_RECV);
 }
 
 void loop() {
@@ -81,22 +85,22 @@ void loop() {
 
   if (x != 0) {
     pan += x;
-    myController.setChannel(101, pan);
+    myController.setChannel(201, pan);
   }
   if (y != 0) {
     tilt += y;
-    myController.setChannel(103, tilt);
+    myController.setChannel(203, tilt);
   }
 
   if (button != 0) {
     bright += button;
-    myController.setChannel(114, bright);
-    myController.setChannel(113, 255);
+    myController.setChannel(214, bright);
+    myController.setChannel(213, 255);
   }
 
   // if you changed any of those things, you need to send a packet:
-  if (x != 0 || y != 0 || button != 0) {
-    myController.sendPacket(receiverAddress);       // send the data
+  if (x != 0 || y != 0 || button != 0 ) {
+    myController.sendPacket(SECRET_SACN_RECV);       // send the data
   }
 
   // print the results
@@ -107,5 +111,3 @@ void loop() {
   Serial.println(button);
   delay(100);                                    // wait .1 second
 }
-
-

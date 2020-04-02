@@ -25,15 +25,20 @@
 #include <SPI.h>
 //#include <WiFi101.h>      // use this for MKR1000
 #include <WiFiNINA.h>       // use this for MKR1010, Nano33 IoT
-//#include <ESP8266WiFi.h>    // This should work with the ESP8266 as well.
+//#include <ESP8266WiFi.h>  // This should work with the ESP8266 as well.
 #include <WiFiUdp.h>
 #include <sACNSource.h>
 #include "arduino_secrets.h"
 
-WiFiUDP Udp;                                  // instance of UDP library
-sACNSource myController(Udp);                 // Your Ethernet-to-DMX device
-int myUniverse = 1;                                 // DMX universe
-char myDevice[] = "myDeviceName";                   // sender name
+WiFiUDP Udp;                        // instance of UDP library
+sACNSource myController(Udp);       // Your Ethernet-to-DMX device
+int myUniverse = 1;                 // DMX universe
+char myDevice[] = "myDeviceName";   // sender name
+
+long lastSendTime = 0;              // timestamp of last transmission
+int interval = 500;                 // sending interval
+int lastLevel = 0;                  // level of last reading
+int threshold = 3;                  // a little over 1% on a 0-255 range
 
 void setup() {
   Serial.begin(9600);
@@ -60,20 +65,19 @@ void setup() {
 }
 
 void loop() {
-  // fade up:
-  for (int level = 0; level < 256; level++) {
-    myController.setChannel(4, level);              // set channel 1 (intensity)
-    Serial.println(level);                          // print level
-    myController.sendPacket(SECRET_SACN_RECV);       // send the data
-    delay(100);                                    // wait .1 second
+  // if the send time threshold has passed:
+  if (millis() - lastSendTime > interval) {
+    // read an analog sensor:
+    int sensorValue = analogRead(A0);
+    // convert to a byte:
+    byte level = sensorValue / 4;
+    // if the converted reading has changed by more than the threshold:
+    if (abs(level - lastLevel) > threshold) {
+      myController.setChannel(4, level);              // set channel intensity
+      Serial.println(level);                          // print level
+      myController.sendPacket(SECRET_SACN_RECV);      // send the data
+      lastLevel = level;        // save current level for comparison next time
+      lastSendTime = millis();  // save current timestamp for comparison next time
+    }
   }
-  delay(1000);
-  // fade down:
-  for (int level = 255; level >= 0; level--) {
-    myController.setChannel(4, level);              // set channel 1 (intensity)
-    Serial.println(level);                          // print level
-    myController.sendPacket(SECRET_SACN_RECV);      // send the data
-    delay(100);                                    // wait .1 second
-  }
-  delay(1000);
 }
