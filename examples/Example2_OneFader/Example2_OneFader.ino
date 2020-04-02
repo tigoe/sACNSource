@@ -37,8 +37,6 @@ char myDevice[] = "myDeviceName";   // sender name
 
 long lastSendTime = 0;              // timestamp of last transmission
 int interval = 500;                 // sending interval
-int lastLevel = 0;                  // level of last reading
-int threshold = 3;                  // a little over 1% on a 0-255 range
 
 void setup() {
   Serial.begin(9600);
@@ -65,19 +63,17 @@ void setup() {
 }
 
 void loop() {
+
+  // read an analog sensor:
+  int sensorValue = analogRead(A0);
+  // convert to a byte:
+  byte level = sensorValue / 4;
+  myController.setChannel(4, level);              // set channel intensity
+
   // if the send time threshold has passed:
   if (millis() - lastSendTime > interval) {
-    // read an analog sensor:
-    int sensorValue = analogRead(A0);
-    // convert to a byte:
-    byte level = sensorValue / 4;
-    // if the converted reading has changed by more than the threshold:
-    if (abs(level - lastLevel) > threshold) {
-      myController.setChannel(4, level);              // set channel intensity
-      Serial.println(level);                          // print level
-      myController.sendPacket(SECRET_SACN_RECV);      // send the data
-      lastLevel = level;        // save current level for comparison next time
-      lastSendTime = millis();  // save current timestamp for comparison next time
-    }
+    Serial.println(level);                          // print level
+    myController.sendPacket(SECRET_SACN_RECV);      // send the data
+    lastSendTime = millis();  // save current timestamp for comparison next time
   }
 }
