@@ -53,7 +53,7 @@ void setup() {
   Serial.println(ip);
 
   // set DMX channel values to 0:
-  for (int dmxChannel = 1; dmxChannel < 513; dmxChannel++) {
+  for (int dmxChannel = 0; dmxChannel < 513; dmxChannel++) {
     myController.setChannel(dmxChannel, 0);
   }
   myController.sendPacket(SECRET_SACN_RECV);
