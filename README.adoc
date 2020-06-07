@@ -188,7 +188,7 @@ a byte containing the options flags for preview data, stream termination, and fo
 void
 
 .Notes
-Not implemented in version 0.0.1
+Not implemented in version 0.0.2
 
 == readData
 .Syntax
