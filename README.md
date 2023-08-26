@@ -8,7 +8,7 @@ For more detail on the sACN protocol, see the [ESTA E.131 protocol document](htt
 
 ## [Commands](#commands) 
 
-### sACNSource
+### [sACNSource](#sacnsource)
 
 #### Syntax
 ````
@@ -26,7 +26,7 @@ void
 Initializes the sACN packet.
 
 
-### begin
+### [begin](#begin)
 
 #### Syntax
 ````
@@ -50,7 +50,7 @@ void
 Sets the initial parameters for the sACN packet.
 
 
-### setUuid
+### [setUuid](#setuuid)
 
 #### Syntax
 ````
@@ -66,7 +66,7 @@ void
 #### Notes
 This must be in ASCII-encoded hexadecimal, but can include dashes as delimiters. See [UUID Generator](https://www.uuidgenerator.net/) for examples.
 
-### setSourceName
+### [setSourceName](#setsourcename)
 
 #### Syntax
 ````
@@ -99,7 +99,7 @@ The sACN formula for setting the IP address based on the universe number is: `23
 
 NOTE: the library currently does not recalculate the multicast IP based on the universe number. 
 
-### setChannel
+### [setChannel](#setchannel)
 #### Syntax
 ````
 myController.setChannel(dmxChannel, level);
@@ -116,7 +116,7 @@ void
 #### Notes
 Note that DMX channels are usually 1-indexed, rather than 0-indexed. So the first channel is channel 1.
 
-### sendPacket
+### [sendPacket](#sendpacket)
 #### Syntax
 ````
 myController.sendPacket(receiverAddress);
@@ -134,7 +134,7 @@ void
 #### Notes
 This function auto-increments the sequence number for packets, so you don't have to.
 
-### setSequenceNumber
+### [setSequenceNumber](#setsequencenumber)
 #### Syntax
 ````
 myController.setSequenceNumber(seqNumber);
@@ -149,7 +149,7 @@ void
 #### Notes
 sACN packets are given a packet sequence number so that the receiver can keep the sequence of packets from a given sender. The _sendPacket_ function automatically increments the sequence number, so there's no real need to set this unless you want to set a specific number.
 
-### getSequenceNumber
+### [getSequenceNumber](#getsequencenumber)
 
 #### Syntax
 ````
@@ -164,7 +164,7 @@ a byte containing the latest packet sequence number.
 
 #### Notes
 
-### setSyncAddress
+### [setSyncAddress](#setsyncaddress)
 #### Syntax
 ````
 myController.setSyncAddress(syncAddress);
@@ -178,7 +178,7 @@ void
 
 #### Notes
 
-### setOptions
+### [setOptions](#setoptions)
 #### Syntax
 ````
 myController.setOptions(options);
@@ -193,7 +193,7 @@ void
 #### Notes
 Not implemented in version 0.0.2
 
-### readData
+### [readData](#readdata)
 #### Syntax
 ````
 myController.readData(byteNumber);
@@ -207,7 +207,7 @@ a byte variable containing the value of the byte you requested
 
 #### Notes
 
-### packetSize
+### [packetSize](#packetsize)
 #### Syntax
 ````
 myController.packetSize();
