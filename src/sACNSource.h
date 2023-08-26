@@ -6,6 +6,10 @@
   For protocol definition, see http://tsp.esta.org/tsp/documents/docs/E1-31-2016.pdf
 
 */
+
+// TODO: Calculate the multicast IP address based on the
+// universe number. [ETC's multicast calculator](https://support.etcconnect.com/ETC/Networking/General/sACN_Multicast_Calculator).
+
 #ifndef sACNSource_h
 #define sACNSource_h
 
