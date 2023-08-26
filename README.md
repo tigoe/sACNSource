@@ -6,7 +6,7 @@ The Library uses the Arduino WiFiUDP library. It can work with any boards using 
 
 For more detail on the sACN protocol, see the [ESTA E.131 protocol document](http://tsp.esta.org/tsp/documents/docs/E1-31-2016.pdf)
 
-## [Commands](#Commands) 
+## [Commands](#commands) 
 
 ### sACNSource
 
@@ -81,7 +81,7 @@ void
 
 #### Notes
 
-### [setUniverse](#setUniverse)
+### [setUniverse](#setuniverse)
 
 #### Syntax
 ````
