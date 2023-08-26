@@ -2,7 +2,7 @@
 
 This library creates an array for sending DMX-512 messages using streaming ACN (sACN). This affords control of many modern stage lighting fixtures over UDP. The library wraps a UDP transport object in the constructor so it can send UDP packets.
 
-The Library uses the Arduino WiFiUDP library. It can work with any boards using a variant of the Arduino WiFi library, including the MKR1000 (WiFi101), Nano 11 IoT and Nano RP2040 Connect (WiFiNINA) or Uno R4 WiFI (WiFiS3), or ESP8266 boards using the ESP8266WiFi library.
+The Library uses the Arduino WiFiUDP library. It can work with any boards using a variant of the Arduino WiFi library, including the MKR1000 (WiFi101), Nano 33 IoT and Nano RP2040 Connect (WiFiNINA) or Uno R4 WiFI (WiFiS3), or ESP8266 boards using the ESP8266WiFi library.
 
 For more detail on the sACN protocol, see the [ESTA E.131 protocol document](http://tsp.esta.org/tsp/documents/docs/E1-31-2016.pdf)
 
