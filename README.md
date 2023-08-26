@@ -43,6 +43,8 @@ myController.begin(myDevice, myUuid, myUniverse, thisPort);
 
 `thisPort` - if you want to use a port other than the sACN standard (5568), you can pass in an int with your port number
 
+**Note:** You can change the universe, UUID, and device name after initialization using the appropriate commands for setting them. 
+
 #### Returns
 void
 
@@ -97,7 +99,7 @@ void
 #### Notes
 The sACN formula for setting the IP address based on the universe number is: `239.255.universeHigh.universeLow`. For example, a unverse number anywhere from 0-255 would be `239.255.0.universeNumber`. For a universe number 256, it would be `239.255.1.0`. For universe 1023 it would be `239.255.3.255`. This comes from [ETC's multicast calculator](https://support.etcconnect.com/ETC/Networking/General/sACN_Multicast_Calculator).
 
-NOTE: the library currently does not recalculate the multicast IP based on the universe number. 
+**NOTE:** the library currently does not recalculate the multicast IP based on the universe number. 
 
 ### [setChannel](#setchannel)
 #### Syntax
