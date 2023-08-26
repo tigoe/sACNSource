@@ -1,0 +1,4 @@
+theme: jekyll-theme-minimal
+title: sACNSource 
+description: An Arduino Library for streaming ACN
+codeurl: https://github.com/tigoe/sACNSource/tree/main
