@@ -137,6 +137,8 @@ void sACNSource::setUniverse(int universeNumber) {
 }
 
 void sACNSource::setSequenceNumber(byte seqNum) {
+  // update sequence number:
+  _byteArray[111] = seqNum;
   _sequenceNumber = seqNum;
 }
 
