@@ -176,6 +176,6 @@ void sACNSource::sendPacket(const char* addr, int thisPort) {
    this->_udp->endPacket();                            // finish and send packet
   // you can send continuously without incrementing the
   // sequence number, but it's good practice:
-   this->setSequenceNumber(this->_sequenceNumber++);
+   this->setSequenceNumber(++this->_sequenceNumber);
  }
 }
