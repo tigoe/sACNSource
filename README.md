@@ -16,6 +16,13 @@ WiFiUDP Udp;                       // instance of UDP library
 sACNSource myController(Udp);      // Your Ethernet-to-DMX device
 ````
 
+Or for wired Ethernet:
+````
+
+EthernetUDP Udp;                // An EthernetUDP instance
+sACNSource myController(Udp);   // Your Ethernet-to-DMX device
+````
+
 #### Parameters
 takes a UDP object for transport
 
