@@ -1,9 +1,12 @@
 # sACN over Ethernet
 
-This example shows how to send sACN from an Arduino over Ethernet. It was written with a Nano 33 IoT and a MKR Ethernet shield, as shown in Figur3 1, but should work with any Arduino and any Ethernet shield that's compatible with the Ethernet library. 
+This example shows how to send sACN from an Arduino over Ethernet. It was written with a Nano 33 IoT and a MKR Ethernet shield, as shown in Figure 1, but should work with any Arduino and any Ethernet shield that's compatible with the Ethernet library. 
 
 Figure 1 shows the circuit. 
 
 ![Figure 1. Nano 33 IoT connected to a MKR Ethernet shield](Nano_33_MKR_ETH.png)
 
 _Figure 1. Nano 33 IoT connected to a MKR Ethernet shield_
+
+```arduino:Example7_sACNEthernet.ino
+```
