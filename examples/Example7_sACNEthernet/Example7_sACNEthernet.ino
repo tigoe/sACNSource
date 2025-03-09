@@ -1,8 +1,8 @@
 /*
    sACN intro for wired Ethernet
 
-   This sketch creates a sACN packet, then uses it to send
-   fade information to an sACN receiver.
+   This sketch creates a sACN packet, then uses it to 
+   send fade information to an sACN receiver over wired Ethernet.
    This was originally tested with a DMXKing eDMX1 Pro
    and a DMX fixture with intensity on channel 4
    https://dmxking.com/artnetsacn/edmx1-pro
