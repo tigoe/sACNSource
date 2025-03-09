@@ -1,8 +1,9 @@
 /*
-   sACN intro
+   sACN One Fader
 
    This sketch creates a sACN packet, then uses it to send
-   fade information to an sACN receiver.
+   fade information to an sACN receiver. It reads from
+   one analog input to generate the channel level. 
    This was originally tested with a DMXKing eDMX1 Pro
    and a DMX fixture with intensity on channel 4
    https://dmxking.com/artnetsacn/edmx1-pro
