@@ -1,6 +1,6 @@
 # Examples
 
-## [Example 1](({{site.github.repository_url}}/tree/main/examples/Example1_sACNIntro)
+## [Example 1]({{site.github.repository_url}}/tree/main/examples/Example1_sACNIntro)
 This sketch creates a sACN packet, then uses it to send fade information to an sACN receiver.
 
 ## [Example 2]({{site.github.repository_url}}/tree/main/examples/Example2_OneFader)
