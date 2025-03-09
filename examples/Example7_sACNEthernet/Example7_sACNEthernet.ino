@@ -17,7 +17,7 @@
   #define SECRET_SACN_UUID "CBC0C271-8022-4032-BC6A-69F614C62816"
 
    created 1 Mar 2021
-   updated 8 Mar 2025
+   updated 9 Mar 2025
    by Tom Igoe
 */
 #include <SPI.h>
@@ -26,14 +26,18 @@
 #include <sACNSource.h>
 #include "arduino_secrets.h"
 
+// control pins for SPI Chip select of the Ethernet module and SD card:
+const int CSPin = 5;
+const int SD_CSPin = 4;
+
 // enter a MAC address here. To be safe on an institutional network,
 // use an address where the first octet ends in 2, 6, A, or E,
 // e.g. 0x 02, 0x86, 0x4A or 0xDE
 // this will ensure that it's a locally administered, unicast address.
 // if you know someone else will be using this sketch on your LAN,
 // don't use the default address below:
-byte mac[] = {
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
+const byte mac[] = {
+  0xA8, 0x61, 0x0A, 0x00, 0x00, 0x00
 };
 
 // An EthernetUDP instance:
@@ -49,17 +53,12 @@ void setup() {
   Serial.begin(9600);
   // delay 3 seconds if serial monitor is not open:
   if (!Serial) delay(3000);
-  // take pin 4 high to disable SD card on ETH shield:
-  pinMode(4, OUTPUT);
-  digitalWrite(4, HIGH);
-  pinMode(A0, OUTPUT);
+  // take pin SD_CS high to disable SD card on ETH shield:
+  pinMode(SD_CSPin, OUTPUT);
+  digitalWrite(SD_CSPin, HIGH);
+
   // initialize pin  as ETH shield chip select pin:
-  //Ethernet.init(10);  // Most Arduino shields
-  Ethernet.init(5);  // MKR ETH Shield
-  //Ethernet.init(0);   // Teensy 2.0
-  //Ethernet.init(20);  // Teensy++ 2.0
-  //Ethernet.init(15);  // ESP8266 with Adafruit FeatherWing Ethernet
-  //Ethernet.init(33);  // ESP32 with Adafruit FeatherWing Ethernet
+   Ethernet.init(CSPin);  
  
    // start the Ethernet connection:
   Serial.println("Initialize Ethernet with DHCP:");
