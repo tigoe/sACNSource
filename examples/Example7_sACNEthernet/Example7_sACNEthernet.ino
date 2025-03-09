@@ -10,12 +10,14 @@
    You'll also need to add a tab to your sketch called arduino_secrets.h
    for the following:
 
-  #define SECRET_SACN_RECV "192.168.0.14"  // your sACM receiver's IP address
+// your sACM receiver's IP address. This is the broadcast default:
+   #define SECRET_SACN_RECV "239.255.0.1"  
   // Unique ID of your SACN source. You can generate one from https://uuidgenerator.net
   // or on the command line by typing uuidgen
   #define SECRET_SACN_UUID "CBC0C271-8022-4032-BC6A-69F614C62816"
 
    created 1 Mar 2021
+   updated 8 Mar 2025
    by Tom Igoe
 */
 #include <SPI.h>
@@ -52,12 +54,23 @@ void setup() {
   digitalWrite(4, HIGH);
   pinMode(A0, OUTPUT);
   // initialize pin  as ETH shield chip select pin:
-  Ethernet.init(5);
-
+  //Ethernet.init(10);  // Most Arduino shields
+  Ethernet.init(5);  // MKR ETH Shield
+  //Ethernet.init(0);   // Teensy 2.0
+  //Ethernet.init(20);  // Teensy++ 2.0
+  //Ethernet.init(15);  // ESP8266 with Adafruit FeatherWing Ethernet
+  //Ethernet.init(33);  // ESP32 with Adafruit FeatherWing Ethernet
+ 
+   // start the Ethernet connection:
+  Serial.println("Initialize Ethernet with DHCP:");
   // try to connect via DHCP:
-  if (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
-    
+  if (Ethernet.begin(mac) == 0) { 
+    Serial.print("Failed to configure Ethernet  using DHCP");
+    Serial.print("Trying fixed address");
+    // Alternative if you're not using DHCP:
+    Ethernet.begin(mac, ip);
+  }
+
     // if the Ethernet shield can't be detected:
     if (Ethernet.hardwareStatus() == EthernetNoHardware) {
       Serial.println("Ethernet shield was not found.");
