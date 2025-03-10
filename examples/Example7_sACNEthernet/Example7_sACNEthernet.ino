@@ -17,7 +17,7 @@
   #define SECRET_SACN_UUID "CBC0C271-8022-4032-BC6A-69F614C62816"
 
    created 1 Mar 2021
-   updated 9 Mar 2025
+   updated 10 Mar 2025
    by Tom Igoe
 */
 #include <SPI.h>
@@ -58,29 +58,25 @@ void setup() {
   digitalWrite(SD_CSPin, HIGH);
 
   // initialize pin  as ETH shield chip select pin:
-   Ethernet.init(CSPin);  
- 
-   // start the Ethernet connection:
+  Ethernet.init(CSPin);
+
+  // start the Ethernet connection:
   Serial.println("Initialize Ethernet with DHCP:");
   // try to connect via DHCP:
-  if (Ethernet.begin(mac) == 0) { 
+  if (Ethernet.begin(mac) == 0) {
     Serial.print("Failed to configure Ethernet  using DHCP");
-    Serial.print("Trying fixed address");
-    // Alternative if you're not using DHCP:
-    Ethernet.begin(mac, ip);
   }
 
-    // if the Ethernet shield can't be detected:
-    if (Ethernet.hardwareStatus() == EthernetNoHardware) {
-      Serial.println("Ethernet shield was not found.");
-      
+  // if the Ethernet shield can't be detected:
+  if (Ethernet.hardwareStatus() == EthernetNoHardware) {
+    Serial.println("Ethernet shield was not found.");
+
     // if the cable's not connected or the port it's plugged into isn't live:
-    } else if (Ethernet.linkStatus() == LinkOFF) {
-      Serial.println("Ethernet cable is not connected.");
-      
-    }
+  } else if (Ethernet.linkStatus() == LinkOFF) {
+    Serial.println("Ethernet cable is not connected.");
     // no point in carrying on, so do nothing forevermore:
-    while (true);
+    while (true)
+      ;
   }
   // When you're connected, print out the device's network status:
   IPAddress ip = Ethernet.localIP();
@@ -104,18 +100,18 @@ void loop() {
 
   // fade up:
   for (int level = 0; level < 256; level++) {
-    myController.setChannel(1, level);              // set channel 1 (intensity)
-    Serial.println(level);                          // print level
-    myController.sendPacket(SECRET_SACN_RECV);       // send the data
-    delay(100);                                    // wait .1 second
+    myController.setChannel(1, level);          // set channel 1 (intensity)
+    Serial.println(level);                      // print level
+    myController.sendPacket(SECRET_SACN_RECV);  // send the data
+    delay(100);                                 // wait .1 second
   }
   delay(1000);
   // fade down:
   for (int level = 255; level >= 0; level--) {
-    myController.setChannel(1, level);              // set channel 1 (intensity)
-    Serial.println(level);                          // print level
-    myController.sendPacket(SECRET_SACN_RECV);      // send the data
-    delay(100);                                    // wait .1 second
+    myController.setChannel(1, level);          // set channel 1 (intensity)
+    Serial.println(level);                      // print level
+    myController.sendPacket(SECRET_SACN_RECV);  // send the data
+    delay(100);                                 // wait .1 second
   }
   delay(1000);
 }

@@ -8,6 +8,8 @@ If you're using a MKR board (MKR Zero, MKR1010, etc), you can just plug the shie
 
 The pins for the Nano 33 IoT and other Nanos is in Table 1 below. The physical pin numbers for both the Nano and the shield are counted in a U pattern, starting with pin 1 on the top left. The physical pin numbers don't correspond to the pin labels, so the pin labels are listed in parentheses in table 1. 
 
+Note: in the circuit diagram in Figure 1, the MKR Ethernet shield is being powered by 3.3V from the Nano, rather than 5V. The shield will run off 3.3V, but it must be connected to the 5V pin, not the Vin pin if so. The Vin pin needs >5V to run the board.  
+
 | Function | Nano 33 IoT Physical Pin | MKR Ethernet Shield Physical Pin  | 
 |-----|-----|-----|
 | SDO | 29 (D1) | 17 (D8) | 
