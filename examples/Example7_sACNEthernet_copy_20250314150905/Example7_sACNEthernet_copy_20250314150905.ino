@@ -10,8 +10,12 @@
    You'll also need to add a tab to your sketch called arduino_secrets.h
    for the following:
 
-// your sACM receiver's IP address. This is the broadcast default:
-   #define SECRET_SACN_RECV "239.255.0.1"  
+// your sACN receiver's IP address. 
+The broadcast default is 239.255.0.1, but it causes considerable
+slowdown for the Ethernet library. A better alternative is the
+broadcast address on your own network. So if your sender, e.g.
+is 192.168.0.10, then send to 192.168.0.255:
+   #define SECRET_SACN_RECV "192.168.0.255"  
   // Unique ID of your SACN source. You can generate one from https://uuidgenerator.net
   // or on the command line by typing uuidgen
   #define SECRET_SACN_UUID "CBC0C271-8022-4032-BC6A-69F614C62816"
@@ -36,9 +40,10 @@ const int SD_CSPin = 4;
 // this will ensure that it's a locally administered, unicast address.
 // if you know someone else will be using this sketch on your LAN,
 // don't use the default address below:
-const byte mac[] = {
-  0xA8, 0x61, 0x0A, 0x00, 0x00, 0x00
+byte mac[] = {
+  0xA8, 0x61, 0x0A, 0x12, 0x34, 0xAB
 };
+IPAddress ip(192, 168, 0, 11);
 
 // An EthernetUDP instance:
 EthernetUDP Udp;
@@ -59,13 +64,16 @@ void setup() {
 
   // initialize pin  as ETH shield chip select pin:
   Ethernet.init(CSPin);
+  // initialize Ethernet with a fixed IP address:
+  Serial.println("initializing Ethernet with fixed address");
+  Ethernet.begin(mac, ip);
 
-  // start the Ethernet connection:
-  Serial.println("Initialize Ethernet with DHCP:");
+  // Alternately start the Ethernet connection with DHCP:
+  // Serial.println("Initialize Ethernet with DHCP:");
   // try to connect via DHCP:
-  if (Ethernet.begin(mac) == 0) {
-    Serial.print("Failed to configure Ethernet  using DHCP");
-  }
+  // if (Ethernet.begin(mac) == 0) {
+  //   Serial.println("Failed to configure Ethernet  using DHCP");
+  // }
 
   // if the Ethernet shield can't be detected:
   if (Ethernet.hardwareStatus() == EthernetNoHardware) {
@@ -100,7 +108,9 @@ void loop() {
 
   // fade up:
   for (int level = 0; level < 256; level++) {
-    myController.setChannel(1, level);          // set channel 1 (intensity)
+    myController.setChannel(7, level);
+    myController.setChannel(8, level);
+    myController.setChannel(4, level);          // set channel 1 (intensity)
     Serial.println(level);                      // print level
     myController.sendPacket(SECRET_SACN_RECV);  // send the data
     delay(100);                                 // wait .1 second
@@ -108,7 +118,7 @@ void loop() {
   delay(1000);
   // fade down:
   for (int level = 255; level >= 0; level--) {
-    myController.setChannel(1, level);          // set channel 1 (intensity)
+    myController.setChannel(4, level);          // set channel 1 (intensity)
     Serial.println(level);                      // print level
     myController.sendPacket(SECRET_SACN_RECV);  // send the data
     delay(100);                                 // wait .1 second
