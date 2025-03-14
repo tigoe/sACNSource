@@ -43,6 +43,7 @@ const int SD_CSPin = 4;
 byte mac[] = {
   0xA8, 0x61, 0x0A, 0x12, 0x34, 0xAB
 };
+// IP address if you're setting a fixed address:
 IPAddress ip(192, 168, 0, 11);
 
 // An EthernetUDP instance:
@@ -108,9 +109,7 @@ void loop() {
 
   // fade up:
   for (int level = 0; level < 256; level++) {
-    myController.setChannel(7, level);
-    myController.setChannel(8, level);
-    myController.setChannel(4, level);          // set channel 1 (intensity)
+    myController.setChannel(1, level);          // set channel 1 (intensity)
     Serial.println(level);                      // print level
     myController.sendPacket(SECRET_SACN_RECV);  // send the data
     delay(100);                                 // wait .1 second
@@ -118,7 +117,7 @@ void loop() {
   delay(1000);
   // fade down:
   for (int level = 255; level >= 0; level--) {
-    myController.setChannel(4, level);          // set channel 1 (intensity)
+    myController.setChannel(1, level);          // set channel 1 (intensity)
     Serial.println(level);                      // print level
     myController.sendPacket(SECRET_SACN_RECV);  // send the data
     delay(100);                                 // wait .1 second
