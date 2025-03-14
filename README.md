@@ -4,6 +4,10 @@ This library creates an array for sending DMX-512 messages using streaming ACN (
 
 The Library uses the Arduino WiFiUDP library. It can work with any boards using a variant of the Arduino WiFi library, including the MKR1000 (WiFi101), Nano 33 IoT and Nano RP2040 Connect (WiFiNINA) or Uno R4 WiFI (WiFiS3), or ESP8266 boards using the ESP8266WiFi library.
 
+To install this library: 
+* Download the .zip file from [this link](https://github.com/tigoe/sACNSource/archive/refs/heads/main.zip)
+* In the Arduino IDE, click the Sketch menu, then the Include Library > Add .ZIP Library... item, then choose the .zip file you downloaded. You should see a message indicating that "Library installed." From there, you can click the Examples Menu, sACNSource item, to open the examples. 
+
 For more detail on the sACN protocol, see the [ESTA E.131 protocol document](http://tsp.esta.org/tsp/documents/docs/E1-31-2016.pdf)
 
 ## [Commands](#commands) 
